@@ -7,8 +7,8 @@ var bodyParser = require('body-parser');
 
 //连接monggoDB数据库
 var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/demo');
+var mongoose = require('mongoose');
+var db = mongoose.connect('localhost:27017/demo');
 
 var session = require('express-session');
 

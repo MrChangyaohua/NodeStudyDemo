@@ -1,16 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
-var crypto = require('crypto'),
-  User = require('../models/user.js');
+var User = require('../models/user.js');
 
 /* GET home page. */
-router.get('/login', checkNotLogin);
+router.get('/', checkNotLogin);
 router.get('/', function (req, res, next) {
   res.render('login');
 });
 
-router.get('/login', checkNotLogin);
+router.get('/index', checkNotLogin);
 router.get('/index', function (req, res, next) {
   res.render('login');
 });
@@ -54,9 +53,10 @@ router.post('/register_action', function (req, res, next) {
     email: req.body.email
   });
   //检查用户名是否已经存在
-  User.get(newUser.username, function (err, user) {
+  var whereStr = { 'username': username };
+  User.findOne(whereStr, function (err, user) {
     if (err) {
-      return res.render('register', { message: err });
+      return next(err);
     }
     if (user) {
       return res.render('register', { message: "此用户已存在" });
@@ -64,7 +64,7 @@ router.post('/register_action', function (req, res, next) {
     //如果不存在则新增用户
     newUser.save(function (err, user) {
       if (err) {
-        return res.render('register', { message: err });
+        return next(err);
       }
       //用户信息存入session
       req.session.user = newUser;
@@ -79,9 +79,10 @@ router.post('/login_action', function (req, res, next) {
   var password = req.body.password;
 
   //检查用户名是否已经存在
-  User.get(username, function (err, user) {
+  var whereStr = { 'username': username };
+  User.findOne(whereStr, function (err, user) {
     if (err) {
-      return res.render('login', { message: err });
+      return next(err);
     }
     if (!user) {
       return res.render('login', { message: "用户不存在" });
@@ -118,9 +119,10 @@ router.post('/user_info_modify_action', function (req, res) {
     email: req.body.email
   });
   //修改用户信息数据库操作
-  modifyUser.modify(function (err, user) {
+  var whereStr = {'username':req.body.username};
+  User.update(whereStr, modifyUser, function (err, user) {
     if (err) {
-      return res.render('user_info_modify', { message: err, user: req.session.user });
+      return next(err);
     }
     //用户信息存入session
     req.session.user = modifyUser;
@@ -131,13 +133,13 @@ router.post('/user_info_modify_action', function (req, res) {
 /* 用户删除事件处理 */
 router.get('/user_delete_action', function (req, res) {
   var username = req.session.user.username;
-  User.del(username, function(err){
+  User.del(username, function (err) {
     if (err) {
-      return res.render('user_info_modify', { message: err, user: req.session.user });
+      return rnext(err);
     }
     //清除用户session
     req.session.user = null;
-    res.render('login', { message: "" + username + ",您的账户已删除"});
+    res.render('login', { message: "" + username + ",您的账户已删除" });
   });
 });
 

@@ -1,7 +1,31 @@
-var setting = require("../settings");
-var mongdb = require("mongodb");
-var Db = mongdb.Db;
-var Connection = mongdb.Connection;
-var Server = mongdb.Server;
+var mongoose = require("mongoose");
+var DB_URL = 'mongodb://localhost:27017/demo';
 
-module.exports = new Db(setting.db, new Server(setting.host, setting.port),{safe:true});
+/**
+ * 连接
+ */
+mongoose.connect(DB_URL);
+
+/**
+ * 连接成功
+ */
+mongoose.connection.on('connected', function () {
+    console.log('Mongoose connection open to ' + DB_URL);
+});
+
+/**
+ * 连接异常
+ */
+mongoose.connection.on('error', function (err) {
+    console.log('Mongoose connection error: ' + err);
+});
+
+/**
+ * 连接断开
+ */
+mongoose.connection.on('disconnected', function () {
+    console.log('Mongoose connection disconnected');
+});
+
+
+module.exports = mongoose;
