@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+var crypto = require('crypto');
 var User = require('../models/user.js');
 
 /* GET home page. */
@@ -120,7 +121,12 @@ router.post('/user_info_modify_action', function (req, res) {
   });
   //修改用户信息数据库操作
   var whereStr = {'username':req.body.username};
-  User.update(whereStr, modifyUser, function (err, user) {
+  var modifyStr = {
+    username: req.body.username,
+    telephone: req.body.telephone,
+    email: req.body.email 
+  };
+  User.update(whereStr, modifyStr, function (err, user) {
     if (err) {
       return next(err);
     }
@@ -133,10 +139,11 @@ router.post('/user_info_modify_action', function (req, res) {
 /* 用户删除事件处理 */
 router.get('/user_delete_action', function (req, res) {
   var username = req.session.user.username;
-  User.del(username, function (err) {
+  var whereStr = {'username':username};
+  User.remove(whereStr, function (err) {
     if (err) {
       return rnext(err);
-    }
+    } 
     //清除用户session
     req.session.user = null;
     res.render('login', { message: "" + username + ",您的账户已删除" });

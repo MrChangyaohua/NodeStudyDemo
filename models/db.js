@@ -1,10 +1,8 @@
 var mongoose = require("mongoose");
 var DB_URL = 'mongodb://localhost:27017/demo';
 
-/**
- * 连接
- */
-mongoose.connect(DB_URL);
+mongoose.Promise = global.Promise;
+var db = mongoose.connect(DB_URL, { useMongoClient: true });
 
 /**
  * 连接成功
@@ -28,4 +26,4 @@ mongoose.connection.on('disconnected', function () {
 });
 
 
-module.exports = mongoose;
+module.exports = db;
