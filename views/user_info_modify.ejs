@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户信息修改页面</title>
+
+    <script type="text/javascript" language="JavaScript">
+        function show_delete_confirm() {
+            var r = confirm("您确定要删除您的账号吗？一旦删除，您的信息也全部删除且无法恢复。");
+            if (r == true) {
+                window.location.href = "../user_delete_action";
+            } else{
+
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+    <%
+        if("undefined" != typeof message){
+        %>
+        <p>
+            <span style="font-size:16px">
+                <%= message %>
+            </span>
+        </p>
+
+        <%    
+        } 
+        %>
+            <form name="user_info" action="user_info_modify_action" method="post">
+                用户名:
+                <input type="text" name="username" readonly="true" value= <%= user.username %>>
+                <br/> 电话号码
+                <input type="number" name="telephone" value= <%= user.telephone %>>
+                <br/>邮箱:
+                <input type="email" name="email" value= <%= user.email %>>
+                <br/>
+                <input type="submit" name="submit" value="提交">
+                <input type="button" onclick="show_delete_confirm()" name="delete" value="删除账号">
+            </form>
+</body>
+
+</html>
