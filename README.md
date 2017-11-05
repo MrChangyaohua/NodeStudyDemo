@@ -1,5 +1,8 @@
 # node_first_test
-Some learning code about Node.js, including Express, React and MongoDB. 
+### 目的
+用于入门学习Node.js后台开发技术
+
+### 基本功能
 用于学习Node.js的一个小工程，使用用户的登陆，注册，注销，删除，还有用户信息的修改。
 
 ### 整体框架
